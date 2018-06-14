@@ -80,9 +80,9 @@ As a novice to molecular dynamics (MD), I have spent a few weeks following the t
 |------|----------|
 | [instructions_cytosolic.txt](https://github.com/roonysgalbi/protstruct/blob/master/vmd/instructions_cytosolic.txt) | Commands to perform MD in VMD on cytosolic proteins |
 | [instructions_membranebound.txt](https://github.com/roonysgalbi/protstruct/blob/master/vmd/instructions_membranebound.txt) | Commands to perform MD in VMD on membrane bound proteins |
+| [prepsystem.tcl](https://github.com/roonysgalbi/protstruct/blob/master/vmd/prepsystem.tcl) | Example script to perform MD in VMD on membrane bound proteins|
 | [getBoxSize.tcl](https://github.com/roonysgalbi/protstruct/blob/master/vmd/getBoxSize.tcl) | Determines periodic boundary conditions for config file|
 | [template.config.namd](https://github.com/roonysgalbi/protstruct/blob/master/vmd/template.config.namd) | Sets all paramaters required for a single MD run in VMD |
-| [prepsystem.tcl](https://github.com/roonysgalbi/protstruct/blob/master/vmd/prepsystem.tcl) | Example script to run MD on a membrane bound protein|
 
 ### Considering solvation
 Solvation tools tend to under solvate resulting in a system with too small density that causes [the infamous patch grid error](#the-infamous-patch-grid-error). Another more complex option is to first use DOWSER (to place buried waters), then Helmut Grubmuller's [SOLVATE](https://www.mpibpc.mpg.de/grubmueller/solvate) to generate a closely contoured solvent bubble around the solute. Then use VMD solvate to get the final cube. The main problem with VMD solvate is its inability to do a good job with matching the biomolecular surface, which is where DOWSER and Grubmuller SOLVATE excel. There is now a vmd interface for DOWSER.
