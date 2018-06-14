@@ -3,7 +3,7 @@
 ## Contents
 
 * Using Modeler
-* Using QuikVMD
+* [Using QwikMD](#using-qwikmd)
 
 ## Using Modeller
 
@@ -54,4 +54,6 @@ mod9.20 [targetname].py
 * Determine the compatibility of an atomic model (3D) with its own amino acid sequence (1D) with [Verify3D](http://servicesn.mbi.ucla.edu/Verify3d/)
 * Multiple evaluation toolbox with [SAVES](http://servicesn.mbi.ucla.edu/SAVES/)
 
-## vmd
+## Using QwikMd
+
+
