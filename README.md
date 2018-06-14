@@ -55,10 +55,11 @@ mod9.20 [targetname].py
 * Multiple evaluation toolbox with [SAVES](http://servicesn.mbi.ucla.edu/SAVES/)
 
 ## Using QwikMd
+
 * [Download VMD](http://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD)
 * [Install VMD](http://www.ks.uiuc.edu/Research/vmd/current/ig/node6.html)
-* [QwikMD documentation](http://www.ks.uiuc.edu/Research/vmd/plugins/qwikmd/)
-* [QwikMD workflows](http://www.ks.uiuc.edu/Research/qwikmd/tutorial/)
+
+This section is currently a work in progress. As a novice to molecular dynamics, I have spent a few weeks following the tutorials and jumping in at the deep end. Take my advice, [QwikMD](http://www.ks.uiuc.edu/Research/vmd/plugins/qwikmd/) is by far the best place to start. The image below is one of the [QwikMd workflows](http://www.ks.uiuc.edu/Research/qwikmd/tutorial/) on membrane proteins.
 
 <img src="https://github.com/roonysgalbi/protstruct/blob/master/vmd/qwikmd_membrane_proteins.png">
 
