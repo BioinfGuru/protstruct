@@ -1,5 +1,5 @@
 # extracts box size from solvated pdb/psf files for namd config file 
-# see http://www.ks.uiuc.edu/Research/namd/mailing_list/namd-l.2011-2012/2735.html
+# from http://www.ks.uiuc.edu/Research/namd/mailing_list/namd-l.2011-2012/2735.html
 
 proc get_cell {{molid top}} { 
  set all [atomselect $molid all] 
