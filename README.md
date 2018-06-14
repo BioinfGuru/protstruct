@@ -83,6 +83,11 @@ As a novice to molecular dynamics (MD), I have spent a few weeks following the t
 * Prepare
 * Copy and paste all 5 lines of Periodic Boundary Conditions (including header) from previous step into prefix/run/prefixqwikmd_production_1.conf
 * Start equilibration
+* View results: 
+```tcl
+mol delete all
+mol load psf prefix_QwikMD.psf dcd qwikmd_equilibration_0.dcd
+```
 
 ### VMD folder
 | file | contents |
