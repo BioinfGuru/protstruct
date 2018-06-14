@@ -59,21 +59,97 @@ mod9.20 [targetname].py
 * [Download VMD](http://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD)
 * [Install VMD](http://www.ks.uiuc.edu/Research/vmd/current/ig/node6.html)
 
-This section is currently a work in progress. As a novice to molecular dynamics, I have spent a few weeks following the tutorials and jumping in at the deep end. Take my advice, [QwikMD](http://www.ks.uiuc.edu/Research/vmd/plugins/qwikmd/) is by far the best place to start. The image below is one of the [QwikMd workflows](http://www.ks.uiuc.edu/Research/qwikmd/tutorial/) on membrane proteins but for [more extensive tutorials](http://www.ks.uiuc.edu/Training/Tutorials/) are also available
+As a novice to molecular dynamics (MD), I have spent a few weeks following the tutorials and jumping in at the deep end. Take my advice, [QwikMD](http://www.ks.uiuc.edu/Research/vmd/plugins/qwikmd/) is by far the best place to start. The image below is one of the [QwikMd workflows](http://www.ks.uiuc.edu/Research/qwikmd/tutorial/) on membrane proteins but for [more extensive tutorials](http://www.ks.uiuc.edu/Training/Tutorials/) are also available
 
 <img src="https://github.com/roonysgalbi/protstruct/blob/master/vmd/qwikmd_membrane_proteins.png">
 
+### Quick Start
+* Extensions --> simulations --> QwikMD
+* Easy Run --> load example.pdb
+* Chain/Type selection : all
+* Molecular dynamikcs: explicit, 0.15mol/L, NaCl
+* Temp 27C
+* Simulation Time: 10.0
+* Simulation setup --> "save" --> select working directory + provide a file prefix --> "save"
+* Prepare
+* Copy and paste all 5 lines of Periodic Boundary Conditions (including header) from previous step into prefix/run/prefixqwikmd_production_1.conf
+* Start equilibration
+
+### VMD folder
+| file | contents |
+|------|----------|
+| [instructions_cytosolic.txt](https://github.com/roonysgalbi/protstruct/blob/master/vmd/instructions_cytosolic.txt) | Commands to perform MD in VMD on cytosolic proteins |
+| [instructions_membranebound.txt](https://github.com/roonysgalbi/protstruct/blob/master/vmd/instructions_membranebound.txt) | Commands to perform MD in VMD on membrane bound proteins |
+| [getBoxSize.tcl](https://github.com/roonysgalbi/protstruct/blob/master/vmd/getBoxSize.tcl) | Determines periodic boundary conditions for config file|
+| [template.config.namd](https://github.com/roonysgalbi/protstruct/blob/master/vmd/template.config.namd) | Sets all paramaters required for a single MD run in VMD |
+| [prepsystem.tcl](https://github.com/roonysgalbi/protstruct/blob/master/vmd/prepsystem.tcl) | Example script to run MD on a membrane bound protein|
+
+### Considering solvation
+Solvation tools tend to under solvate resulting in a system with too small density that causes [the infamous patch grid error](#the-infamous-patch-grid-error). Another more complex option is to first use DOWSER (to place buried waters), then Helmut Grubmuller's [SOLVATE](https://www.mpibpc.mpg.de/grubmueller/solvate) to generate a closely contoured solvent bubble around the solute. Then use VMD solvate to get the final cube. The main problem with VMD solvate is its inability to do a good job with matching the biomolecular surface, which is where DOWSER and Grubmuller SOLVATE excel. There is now a vmd interface for DOWSER.
+
+### Using [atomselect](http://www.ks.uiuc.edu/Research/vmd/vmd-1.7/ug/node181.html) in TK console
+
+```tcl
+set sel [atomselect top "water"] # selects all water molecules
+$sel num # counts number of atoms in selection
+$sel get name # gets names of all atoms in selection
+$sel get {name backbone} # getting multiple attributes from each atom in selection
+$sel get {x y z} # get coords of each atom in selection
+$sel set {x y z} {{1.6 0 0}} # set coords of all atoms in selection
+$sel set beta 0 # set beta of all atoms in selection --> now colour by beta
+```
+### Show hydrophobic molecules
+```tcl
+mol delete all
+mol load psf example.psf pdb example.pdb
+set all [atomselect top all]
+$all set beta 2
+set protein [atomselect top protein]
+$protein set beta 1
+set hydro [atomselect top hydrophobic]
+$hydro set beta 0
+#tk console --> graphics --> representations --> protein, beta, new cartoon 
+```
+### Graphics representations
+| selected atoms | coloring method | drawing method |
+|----------------|-----------------|----------------|
+| all not water | name | lines |
+| protein	| sec struct | newcartoon |
+| (chain X and resid 102) | colorID	4 | surf |
+| water | name | points |
+
 ### PDB columns
+| column  |   3  |    4    |   5   |   11    |   12  |
+|---------|------|---------|-------|---------|-------|
+| content | name | resname | resid | segname (2nd last) | segid (last) |
 
-3 name
+### The infamous patch grid error
 
-4 resname
+1 Cause: 
 
-5 resid
+The cell is shrinking too much. The system was started from a simulation box that is significantly larger than that of the equilibrated system. The reason why it shrinks so much initially, is that solvation tools under solvate resulting in a system with too small density. You get the error because NAMD only calculates the patch grid at the beginning of the simulation. 
 
-11 segname (second last column)
+2 Solution: 
 
-12 segid (last column)
+Re-run but in protocol set temp to -213C and time to 0.5ns and leave overnight. The low temp just speeds up the first part of the simulation. The short time gives the tails a chance to reorient before the box starts moving. Stop after restart files are created. Re-start equilibration simulation again with the last configuration (restart files). Rinse and repeat until eventually you will get a box with relatively stable density, which will allow you to run long simulations without the error.
+
+3 To re-start: 
+* Create a backup just in case something goes wrong
+* sudo vmd
+* rename qwikmd_equilibration_0.log so it won't be overwritten
+* simulation setup --> load --> select prefix.qwikmd
+* loading trajectories --> select qwikmd_equilibration_0 --> ok
+* reset time to 10.0
+* start equilibration simulation (may produce error, ignore, press button again)
+* If reset error occurs again --> re-start with time at 0.5 until new restart file created
+* IF no reset error --> re-start with temp at 27C
+
+4 To know when the error has not occured:
+
+After beginning the program there is always many lines stating "MINIMIZER RESTARTING CONJUGATE GRADIENT ALGORITHM DUE TO POOR PROGRESS" until finally, it will say "TCL: Setting parameter langevinpistontemp to 60, TCL: Running for 500 steps". The error then occurs within a few min on the next line "FATAL ERROR". If no error, it will write multiple lines beginning with "PRESSURE", "GPRESSURE", "PRESSAVG".
+
+
+
 
 
 
