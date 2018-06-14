@@ -69,11 +69,9 @@ mod9.20 [targetname].py
 * [Download VMD](http://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD)
 * [Install VMD](http://www.ks.uiuc.edu/Research/vmd/current/ig/node6.html)
 
-As a novice to molecular dynamics (MD), I have spent a few weeks following the tutorials and jumping in at the deep end. Take my advice, [QwikMD](http://www.ks.uiuc.edu/Research/vmd/plugins/qwikmd/) is by far the best place to start. The image below is one of the [QwikMD workflows](http://www.ks.uiuc.edu/Research/qwikmd/tutorial/) on membrane proteins but for [more extensive tutorials](http://www.ks.uiuc.edu/Training/Tutorials/) are also available
+As a novice to molecular dynamics (MD), I have spent a few weeks following the tutorials and jumping in at the deep end. Take my advice, [QwikMD](http://www.ks.uiuc.edu/Research/vmd/plugins/qwikmd/) is by far the best place to start. The [image](http://www.ks.uiuc.edu/Research/qwikmd/tutorial/qwikMD2.tutorial3.png) below is one of the [QwikMD workflows](http://www.ks.uiuc.edu/Research/qwikmd/tutorial/) on membrane proteins but also available are [more extensive tutorials](http://www.ks.uiuc.edu/Training/Tutorials/).
 
 <img src="https://github.com/roonysgalbi/protstruct/blob/master/vmd/qwikmd_membrane_proteins.png">
-
-<img src="http://www.ks.uiuc.edu/Research/qwikmd/tutorial/qwikMD2.tutorial3.png width="800"">
 
 ### Qwik Start
 * Extensions --> simulations --> QwikMD
