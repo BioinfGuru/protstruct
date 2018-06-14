@@ -99,12 +99,3 @@ Preperation:
 
 	keep_water_out.tcl
 
-
-
-PDB colums:
-3 name
-4 resname
-5 resid
-11 segname (second last column)
-12 segid? (last column)
-
