@@ -60,7 +60,7 @@ mod9.20 [targetname].py
 * [QwikMD documentation](http://www.ks.uiuc.edu/Research/vmd/plugins/qwikmd/)
 * [QwikMD workflows](http://www.ks.uiuc.edu/Research/qwikmd/tutorial/)
 
-<img src="https://github.com/roonysgalbi/protstruct/blob/master/vmd/qwikmd_membrane_proteins.png">
+<img src="http://www.ks.uiuc.edu/Research/qwikmd/tutorial/qwikMD2.tutorial3.png">
 
 
 
