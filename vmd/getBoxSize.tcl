@@ -1,6 +1,6 @@
 # extracts box size from solvated pdb/psf files for namd config file 
 # from http://www.ks.uiuc.edu/Research/namd/mailing_list/namd-l.2011-2012/2735.html
-# round each cellBasisVector humber in the results up to an integer as follows
+# round each cellBasisVector humber in the results up to an integer
 
 proc get_cell {{molid top}} { 
  set all [atomselect $molid all] 
