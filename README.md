@@ -63,6 +63,18 @@ This section is currently a work in progress. As a novice to molecular dynamics,
 
 <img src="https://github.com/roonysgalbi/protstruct/blob/master/vmd/qwikmd_membrane_proteins.png">
 
+### PDB columns
+
+3 name
+
+4 resname
+
+5 resid
+
+11 segname (second last column)
+
+12 segid (last column)
+
 
 
 
