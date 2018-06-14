@@ -2,7 +2,7 @@
 
 ## Contents
 
-* Using Modeler
+* [Using Modeler](#using-modeller)
 * [Using QwikMD](#using-qwikmd)
 
 ## Using Modeller
