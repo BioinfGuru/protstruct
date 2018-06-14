@@ -2,8 +2,16 @@
 
 ## Contents
 
-* [Using Modeler](#using-modeller)
-* [Using QwikMD](#using-qwikmd)
+1 [Using Modeler](#using-modeller)
+2 [Using QwikMD](#using-qwikmd)
+* [Qwik Start](#qwik-start)
+* [VMD folder](#vmd-folder)
+* [Considering solvation](#considering-solvation)
+* [Atomselect](#atomselect)
+* [Show hydrophobic molecules](#show-hydrophobic-molecules)
+* [Graphics representations](#graphics-representations)
+* [PDB columns](#pdb-columns)
+* [The infamous patch grid error](#the-infamous-patch-grid-error)
 
 ## Using Modeller
 
@@ -63,7 +71,7 @@ As a novice to molecular dynamics (MD), I have spent a few weeks following the t
 
 <img src="https://github.com/roonysgalbi/protstruct/blob/master/vmd/qwikmd_membrane_proteins.png">
 
-### Quick Start
+### Qwik Start
 * Extensions --> simulations --> QwikMD
 * Easy Run --> load example.pdb
 * Chain/Type selection : all
@@ -87,8 +95,8 @@ As a novice to molecular dynamics (MD), I have spent a few weeks following the t
 ### Considering solvation
 Solvation tools tend to under solvate resulting in a system with too small density that causes [the infamous patch grid error](#the-infamous-patch-grid-error). Another more complex option is to first use DOWSER (to place buried waters), then Helmut Grubmuller's [SOLVATE](https://www.mpibpc.mpg.de/grubmueller/solvate) to generate a closely contoured solvent bubble around the solute. Then use VMD solvate to get the final cube. The main problem with VMD solvate is its inability to do a good job with matching the biomolecular surface, which is where DOWSER and Grubmuller SOLVATE excel. There is now a vmd interface for DOWSER.
 
-### Using [atomselect](http://www.ks.uiuc.edu/Research/vmd/vmd-1.7/ug/node181.html) in TK console
-
+### Atomselect
+Commands to use [atomselect](http://www.ks.uiuc.edu/Research/vmd/vmd-1.7/ug/node181.html) in TK console
 ```tcl
 set sel [atomselect top "water"] # selects all water molecules
 $sel num # counts number of atoms in selection
@@ -147,10 +155,3 @@ Re-run but in protocol set temp to -213C and time to 0.5ns and leave overnight. 
 4 To know when the error has not occured:
 
 After beginning the program there is always many lines stating "MINIMIZER RESTARTING CONJUGATE GRADIENT ALGORITHM DUE TO POOR PROGRESS" until finally, it will say "TCL: Setting parameter langevinpistontemp to 60, TCL: Running for 500 steps". The error then occurs within a few min on the next line "FATAL ERROR". If no error, it will write multiple lines beginning with "PRESSURE", "GPRESSURE", "PRESSAVG".
-
-
-
-
-
-
-
