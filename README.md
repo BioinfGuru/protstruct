@@ -2,9 +2,8 @@
 
 ## Contents
 
-1 [Using Modeler](#using-modeller)
-
-2 [Using QwikMD](#using-qwikmd)
+[Using Modeler](#using-modeller)
+[Using QwikMD](#using-qwikmd)
 * [Qwik Start](#qwik-start)
 * [VMD folder](#vmd-folder)
 * [Considering solvation](#considering-solvation)
