@@ -1,5 +1,10 @@
 # Protein homology modelling and molecular dynamics
 
+## Contents
+
+* Using Modeler
+* Using QuikVMD
+
 ## Using Modeller
 
 Modeller is used to model the protein structure of a target protein based on the protein structure of a template protein
@@ -42,5 +47,11 @@ mod9.20 [targetname].py
 * Scroll to the end of the log file where the 5 models
 * The model with the lowest "molpdf" value is your best model
 * To quick check the best model, load and align the model and template pdfs in [Pymol](https://pymol.org/2/)
+
+8 Model Evaluation
+* Ramachandran plot with [Rampage](http://mordred.bioc.cam.ac.uk/~rapper/rampage.php)
+* Analyze non-bonded interactions with [Errat](http://servicesn.mbi.ucla.edu/ERRAT/)
+* Determine the compatibility of an atomic model (3D) with its own amino acid sequence (1D) with [Verify3D](http://servicesn.mbi.ucla.edu/Verify3d/)
+* Multiple evaluation toolbox with [SAVES](http://servicesn.mbi.ucla.edu/SAVES/)
 
 ## vmd
