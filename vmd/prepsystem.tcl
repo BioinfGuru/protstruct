@@ -109,10 +109,3 @@ package require autoionize
 autoionize -psf vamp2wild_popc_solv.psf -pdb vamp2wild_popc_solv.pdb -neutralize -o vamp2wild_popc_solv_neut
 file delete vamp2wild_popc_solv.psf
 file delete vamp2wild_popc_solv.pdb
-# tk console --> graphics --> representations --> resname CLA, VDW,	Name
-
-###############
-# To view DCD #
-###############
-mol delete all
-mol load psf vamp2_QwikMD.psf dcd qwikmd_equilibration_0.dcd
