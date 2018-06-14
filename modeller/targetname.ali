@@ -1,0 +1,8 @@
+>P1;templatename
+structureX:templatename:.:.:.:.:.:.:.:.
+insert aligned template sequence here ending with *
+
+>P1;targetname
+sequence:targetname:.:.:.:.:.:.:.:.
+insert target sequence here ending with *
+

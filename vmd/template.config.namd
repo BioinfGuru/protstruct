@@ -1,0 +1,81 @@
+# Copy this file, place it in the working directory with the pdb file of interest, remove template from name
+# From: http://www.ks.uiuc.edu/Training/Tutorials/namd/namd-tutorial-html/node26.html
+
+# Specify the files that contain the molecular structure and initial conditions.
+structure          solvate.psf
+coordinates        solvate.pdb
+
+# Set the Tcl variable $temperature
+set temperature    300  ;	# target temperature used several times below
+
+# Starting a run
+temperature         $temperature    ;
+
+# Continuing a run (when first run does not produce a steady state or doing NVT)
+#set inputname      minimized         ;# only need to edit this in one place!
+#binCoordinates     $inputname.restart.coor  ;# coordinates from last run (binary)
+#binVelocities      $inputname.restart.vel   ;# velocities from last run (binary)
+#extendedSystem	   $inputname.restart.xsc   ;# cell dimensions from last run
+
+# Set prefix for output files (differ from inputname)
+outputName         minimized
+
+# Intervals
+restartfreq         500     ;# 500 steps = every 1ps
+dcdfreq             500
+xstFreq             500
+outputEnergies      100     ;# 100 steps = every 0.2 ps
+outputTiming       1000     ;# shows time per step and time to completion
+
+# Force-Field Parameters
+paraTypeCharmm	    on
+parameters          /home/kcondon/Desktop/md/toppar/par_all36_prot.prm
+parameters 			/home/kcondon/Desktop/md/toppar/par_all36_na.prm 
+parameters			/home/kcondon/Desktop/md/toppar/par_all36_lipid.prm 
+parameters			/home/kcondon/Desktop/md/toppar/par_all36_cgenff.prm 
+parameters			/home/kcondon/Desktop/md/toppar/par_all36_carb.prm 
+parameters 			/home/kcondon/Desktop/md/toppar/toppar_water_ions.str
+
+exclude             scaled1-4
+1-4scaling          1.0
+switching           on
+cutoff              12. ;# may use smaller, maybe 10., with PME
+switchdist          10. ;# cutoff - 2.
+
+# Promise that atom won't move more than 2A in a cycle
+pairlistdist        14. ;# cutoff + 2.
+
+# Integrator Parameters
+timestep            2.0  ;# 2fs/step
+rigidBonds          all  ;# needed for 2fs steps
+nonbondedFreq       1    ;# nonbonded forces every step
+fullElectFrequency  2    ;# PME only every other step
+
+# Constant Temperature Control
+langevin            on            ;# langevin dynamics
+langevinDamping     1.            ;# damping coefficient of 1/ps
+langevinTemp        $temperature  ;# random noise at this level
+langevinHydrogen    no            ;# don't couple bath to hydrogens
+
+# Periodic Boundary conditions
+cellBasisVector1 70.89499855041504 0 0
+cellBasisVector2 0 71.0580005645752 0
+cellBasisVector3 0 0 64.97200012207031
+cellOrigin -6.048966407775879 -18.560810089111328 -16.9880313873291
+
+# Wrapping
+wrapWater           on              ;# wrap water to central cell
+wrapAll             on              ;# wrap other molecules too
+wrapNearest         off             ;# use for non-rectangular cells
+
+# Nosé-Hoover Langevin piston method parameters
+langevinPiston        on
+langevinPistonTarget  1.01325      ;# pressure in bar -> 1 atm
+langevinPistonPeriod  100.         ;# oscillation period around 100 fs
+langevinPistonDecay   50.          ;# oscillation decay time of 50 fs
+langevinPistonTemp    $temperature ;# coupled to heat bath
+
+# Minimization
+minimize            1000          ;# lower potential energy for 1000 steps
+reinitvels          $temperature  ;# since minimization zeros velocities
+run 20000 ;# total number of steps

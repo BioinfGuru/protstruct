@@ -1,0 +1,91 @@
+# video:	https://www.youtube.com/watch?v=yKAMRMigmvU
+# data: 	https://github.com/ydsumith/namd_example
+
+1 - Prepare a working directory
+		New empty folder
+		Download the pdb --> biological assembly pdb format --> extract --> rename .pdb1 to .pdb
+		Copy + paste template.config.namd into the folder 
+2 - load pdb file into VMD
+		from wd --> open terminal --> vmd
+		vmd main --> extensions --> tk console --> cd to working directory --> ls
+		mol new [filename].pdb
+3 - create psf file
+		vmd main --> extensions --> modelling --> automatic psf builder
+		delete all default topology files
+		add latest CHARMM Topology Files (downloaded from http://mackerell.umaryland.edu/charmm_ff.shtml)
+		Usually just top_all36_prot.rtf is needed
+			Topology files
+			- /NGS/toppar/top_all22_prot.rtf    	all atom additive RTF for proteins, CHARMM22 with CMAP
+			- /NGS/toppar/top_all36_prot.rtf    	all atom additive RTF for proteins, CHARMM36 version, July 2012
+			- /NGS/toppar/top_all36_na.rtf      	all atom additive RTF for nucleic acids, RNA/DNA updates
+			- /NGS/toppar/top_all35_ethers.rtf  	all atom additive RTF for ethers
+			- /NGS/toppar/top_all36_carb.rtf    	all atom additive RTF for carbohydrates
+			- /NGS/toppar/top_all36_cgenff.rtf  	all atom additive	RTF for general molecules
+			- /NGS/toppar/top_all36_lipid.rtf   	all atom additive	RTF for lipids
+			- /NGS/toppar/toph19.inp            	extended atom RTF for proteins (and HEME)
+			- /NGS/toppar/toppar_water_ions.str 	contains TIP3 water model and ion topology and parameter information
+		load input files --> everything --> guess and split
+		create chains --> apply patches and finish
+4 - solvation (adds a water box)
+		mol delete all
+		mol new [filename]_autopsf.psf
+		mol addfile [filename]_autopsf.pdb
+		vmd main --> extensions --> modelling --> add solvation box
+		boundary = 1.5
+		box padding = set each of the 6 boxes to 20 (angstroms of water padding srrounding the structure)
+		solvate
+		Is the box big enough to completely contain the protein?
+6 - get solvate box size for config.namd
+		source ../getBoxSize.tcl
+		get_cell
+		copy + paste the 4 lines into config.namd file under "Periodic Boundary conditions"
+7 - energy minimization (NVE - "https://www.researchgate.net/post/Use_of_NVE_and_NVT")
+		open terminal in wd
+		namd +p8 config.namd > min.log
+		runtime ~20min
+8 - Analyse energy minimization
+		VMDmain --> extensions --> analysis --> NAMDplot
+		file --> select NAMD log file --> log.out
+		select total --> file --> plot selected data
+		file --> export to ascii vectors
+		open multiplot.dat with MSexcel/LOcalc
+		Select both columns --> chart --> XY scatter --> lines only
+		R click on Y axis --> format axis --> set min and max --> A successful run will show a vertical drop and will end with a horizontal line (meaning the energy was minimized and is in steady state)
+		R click graph --> export as image
+		If there is still a slope --> edit config.namd --> swtich starting a run to continuing a run --> rerun
+		To veiw results --> 
+			mol delete all
+			mol new solvate.psf
+			mol addfile minimized.dcd # minimized coordinates instead of pdb
+9 - constant temperature simulation (NVT - "https://www.researchgate.net/post/Use_of_NVE_and_NVT")
+		Edit config.namd file
+			Starting a run section:		comment out temperature
+			Continuing a run section:	uncomment set inputname, binCoordinates, binVelocities
+			Set prefix section:			change outputName from "minimized" to "nvt"
+			Minimization section:		comment out minimize (in minimization section)
+		open terminal
+		namd +p8 ../config.namd > nvt.log
+		runtime 20min		
+		To veiw results --> 
+			mol delete all
+			mol new solvate.psf
+			mol addfile nvt.dcd # nvt coordinates instead of pdb
+10 - Analyse constant temperature simulation
+		Repeat graph plotting (step 9)
+		Select bond, elect, kinetic, vdw, temp, pressavg, total
+		Export to ASCIII matrix
+		Add header line to matrix in same order as shown on multiplot image
+		Plot XY scatter, edit axis min/max, save image
+		NB: TOTAL (energy) does not have to be horizontal like before
+11 - remove the edits made to the config.namd file in step 9
+
+
+
+To change graphics
+	mol delete all
+	mol new *.psf
+	mol addfile *.pdb
+	vmd main --> graphics --> representations
+	unselect current style + make sure apply changes automatically is switched off
+	protein, chains, ribbons, opaque --> create rep
+	resname HEME, segname, CPK, opaque --> create rep (this line only if heme present)

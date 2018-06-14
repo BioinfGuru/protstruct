@@ -1,0 +1,131 @@
+https://www.youtube.com/watch?v=VH2GAAv3vVM
+http://www.ks.uiuc.edu/Training/Tutorials/
+Files:
+	wget --no-check-certificate https://www.ks.uiuc.edu/~paween/.membrane-tutorial/membrane-tutorial-files.tar.gz .
+1k4c.pdb is in 01-build/example-output
+
+PSF file: protein structure file
+PDB file: protein coordinates file
+solvation = surrounding the structure with water to create a box/sphere, followed by minimization
+minimization = 
+topology files = used for creating psf files, prefix = top
+parameter files = used for running namd, prefix = par
+
+AUTOIONIZE error fix:	
+Uncomment lines beginning with "read para" in /usr/local/lib/vmd/plugins/noarch/tcl/readcharmmtop1.2/toppar_water_ions_namd.str
+http://www.ks.uiuc.edu/Research/vmd/mailing_list/vmd-l/28131.html
+
+Pipeline: ( run tcl files with: vmd -dispdev text -e filename.tcl >filename.log)
+
+
+Preperation:
+- create 3 folders: 1_build, 2_membrane, 3_mdsim
+
+
+1 - BUILD A SOLVATED PROTEIN
+
+	cd to 01-BUILD/1_build
+	download pdb file to this folder
+	build a tetramer if needed:
+		buildtetra.tcl
+		cat KCSA-A.pdb KCSA-B.pdb KCSA-C.pdb KCSA-D.pdb | sed '/^END$/d' >KCSA-ALL.pdb
+	prepfiles.tcl 						# creates separate pdb files for water, potassium and protein segments)
+	buildpsf.tcl 						# creates the psf file from the pdb files created above)
+	solvate -t 3 -n 8 -w kcsav solkcsa 	# solvates the protein (with solvate)
+	make_solv.tcl 						# creates a new solvated psf
+	remove_wat.tcl 						# recentres + removes waters from the hydrophobic protein-membrane interface
+
+2 - EMBED THE PROTEIN IN A LIPID BILAYER
+
+	cd to 02-MEMBRANE / 2_membrane
+	memprot-align.tcl 					# create a patch of membrane align with solvated protein
+	remove_lipwat.tcl 					# remove lipids that occupy same space as protein
+	measure water box size:
+		vmd --> extensions --> tkconsole
+		mol delete all
+		mol new kcsa_popc.psf
+		mol addfile kcsa_popc.pdb
+		set water [atomselect top water]
+		measure minmax $water
+	copy each of the 6 numbers into the "-minmax" variable in solv_remove.tcl (line 2)
+	solv_remove.tcl 					# solvate the system (with vmd)
+	Neutralize the system (also add ions to match physiological conditions - usually 50-100mM or 0.05-0.1 moles per liter)
+		vmd --> extensions --> modeling --> add ions
+		Input PSF 					kcsa_popcw.psf 
+		Input PDB 					kcsa_popcw.pdb 
+		Output prefix 				kcsa_popcwi
+		Neutralize + set conc		0.4
+		Min. distance from solute	5 
+		Min. distance between ions 	5 
+		Segment ID 					ION
+		autoionize
+		check ions are added: 		resname POT VDW	Name
+
+3 - RUN MD SIMULATION
+
+	cd to 03-MINEQ / 3_mdsim
+	edit edit kcsa_popcwimineq-01.conf
+		1 - set "parameters" to "../par_all27_prot_lipid.prm" 	# NBFIX.prm is for K ion channels
+		2 - vmd -dispdev text -e getBoxSize.tcl # notice output printed to screen
+			--> copy the 4 "cell" lines from output
+			--> paste to kcsa_popcwimineq-01.conf "Periodic Boundary Conditions"
+		3 - view periodic to check for gaps (indicates cell dimensions are too big)
+			-->	mol new ../02-MEMBRANE/kcsa_popcwi.psf
+			-->	mol addfile ../02-MEMBRANE/kcsa_popcwi.pdb
+			-->	molinfo top set a  cellBasisVector1 		# get cellBasisVectors getBoxSize.tcl printout
+			-->	molinfo top set b  cellBasisVector2
+			-->	molinfo top set c  cellBasisVector3
+			-->	vmd --> graphics --> representations --> select both X's, Y's and Self
+			-->	reset molinfo lines manually if there are gaps between the cells 
+		4 - set "#PME" 
+			--> set X (>=cellBasisVector1) # the values must be multiples of 2, 3 or 5
+			--> set X (>=cellBasisVector2)
+			--> set X (>=cellBasisVector3)
+		5 - edit kcsa_popcwimineq-01.conf "# Fixed Atoms Constraint"
+		 	--> set "atoms" and "atomforces" to on
+		 	--> set path to .fix file # will be created below
+	create .fix file
+		# determine atoms to be fixed 
+		# this is desirable in a membrane, so as not to be floating like in water
+		# sets all lipid tail atoms to 0, everything else to 1
+		vmd --> tkconsole --> 
+		mol new ../02-MEMBRANE/kcsa_popcwi.psf 
+		mol addfile ../02-MEMBRANE/kcsa_popcwi.pdb 
+		set all [atomselect top "all"]
+		$all set beta 0
+		set fixed [atomselect top "water or name CLA POT or protein or (chain L and name O2 P1 O3 O4 O1 C15 H52 H51 H11 C11 H12 N C14 H42 H43 H41 C12 H22 H23 H21 C13 H33 H31 H32)"]
+		$fixed set beta 1 
+		$all writepdb kcsa_popcwi.fix
+	NEXT Run NAMD
+		namd +p8 kcsa_popcwimineq-01.conf > kcsa_popcwimineq-01.log
+
+	keep_water_out.tcl
+
+
+
+PDB colums:
+3 name
+4 resname
+5 resid
+11 segname (second last column)
+12 segid? (last column)
+
+Graphic representations:
+Selection									Drawing Method		Coloring Method 
+protein 									NewCartoon 			Chain or SegName
+protein and chain C 						NewCartoon 			ColorID 6
+protein 									VDW 				ResType
+not protein 								VDW				 	Name
+resname POPC 								Lines 				SegName
+resname POPC and name P1 					VDW 				Name
+resname POT 								VDW 				Name
+chain C and resname CYS 					VDW 				Name
+chain C and resname HIS and segname A 		VDW 				Name
+chain C and segname A 
+	and protein 
+	and within 5 of resname HIS				Licorice			Name
+chain C and charged 						Licorice 			ResType
+water 										Lines 				ColorID 0 or Name
+water and z<-20								Lines 				ColorID 1
+water and z>10								Lines 				ColorID 1
+
