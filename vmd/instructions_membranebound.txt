@@ -1,5 +1,3 @@
-https://www.youtube.com/watch?v=VH2GAAv3vVM
-http://www.ks.uiuc.edu/Training/Tutorials/
 Files:
 	wget --no-check-certificate https://www.ks.uiuc.edu/~paween/.membrane-tutorial/membrane-tutorial-files.tar.gz .
 1k4c.pdb is in 01-build/example-output
@@ -109,23 +107,4 @@ PDB colums:
 5 resid
 11 segname (second last column)
 12 segid? (last column)
-
-Graphic representations:
-Selection									Drawing Method		Coloring Method 
-protein 									NewCartoon 			Chain or SegName
-protein and chain C 						NewCartoon 			ColorID 6
-protein 									VDW 				ResType
-not protein 								VDW				 	Name
-resname POPC 								Lines 				SegName
-resname POPC and name P1 					VDW 				Name
-resname POT 								VDW 				Name
-chain C and resname CYS 					VDW 				Name
-chain C and resname HIS and segname A 		VDW 				Name
-chain C and segname A 
-	and protein 
-	and within 5 of resname HIS				Licorice			Name
-chain C and charged 						Licorice 			ResType
-water 										Lines 				ColorID 0 or Name
-water and z<-20								Lines 				ColorID 1
-water and z>10								Lines 				ColorID 1
 
