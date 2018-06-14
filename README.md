@@ -54,12 +54,12 @@ mod9.20 [targetname].py
 * Determine the compatibility of an atomic model (3D) with its own amino acid sequence (1D) with [Verify3D](http://servicesn.mbi.ucla.edu/Verify3d/)
 * Multiple evaluation toolbox with [SAVES](http://servicesn.mbi.ucla.edu/SAVES/)
 
-## Using QwikMd
+## Using QwikMD
 
 * [Download VMD](http://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD)
 * [Install VMD](http://www.ks.uiuc.edu/Research/vmd/current/ig/node6.html)
 
-As a novice to molecular dynamics (MD), I have spent a few weeks following the tutorials and jumping in at the deep end. Take my advice, [QwikMD](http://www.ks.uiuc.edu/Research/vmd/plugins/qwikmd/) is by far the best place to start. The image below is one of the [QwikMd workflows](http://www.ks.uiuc.edu/Research/qwikmd/tutorial/) on membrane proteins but for [more extensive tutorials](http://www.ks.uiuc.edu/Training/Tutorials/) are also available
+As a novice to molecular dynamics (MD), I have spent a few weeks following the tutorials and jumping in at the deep end. Take my advice, [QwikMD](http://www.ks.uiuc.edu/Research/vmd/plugins/qwikmd/) is by far the best place to start. The image below is one of the [QwikMD workflows](http://www.ks.uiuc.edu/Research/qwikmd/tutorial/) on membrane proteins but for [more extensive tutorials](http://www.ks.uiuc.edu/Training/Tutorials/) are also available
 
 <img src="https://github.com/roonysgalbi/protstruct/blob/master/vmd/qwikmd_membrane_proteins.png">
 
