@@ -73,6 +73,8 @@ As a novice to molecular dynamics (MD), I have spent a few weeks following the t
 
 <img src="https://github.com/roonysgalbi/protstruct/blob/master/vmd/qwikmd_membrane_proteins.png">
 
+<img src="http://www.ks.uiuc.edu/Research/qwikmd/tutorial/qwikMD2.tutorial3.png width="800"">
+
 ### Qwik Start
 * Extensions --> simulations --> QwikMD
 * Easy Run --> load example.pdb
