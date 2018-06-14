@@ -55,5 +55,13 @@ mod9.20 [targetname].py
 * Multiple evaluation toolbox with [SAVES](http://servicesn.mbi.ucla.edu/SAVES/)
 
 ## Using QwikMd
+* [Download VMD](http://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD)
+* [Install VMD](http://www.ks.uiuc.edu/Research/vmd/current/ig/node6.html)
+* [QwikMD documentation](http://www.ks.uiuc.edu/Research/vmd/plugins/qwikmd/)
+* [QwikMD workflows](http://www.ks.uiuc.edu/Research/qwikmd/tutorial/)
+
+<img src="https://github.com/roonysgalbi/protstruct/blob/master/vmd/qwikmd_membrane_proteins.png">
+
+
 
 
